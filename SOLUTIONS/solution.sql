@@ -5,7 +5,6 @@ SELECT * FROM sales;
 
 -- Reports & Data Analysis
 
-
 -- Q.1 Coffee Consumers Count
 -- How many people in each city are estimated to consume coffee, given that 25% of the population does?
 SELECT 
@@ -15,12 +14,11 @@ city_rank
 FROM CITY 
 ORDER BY 2 DESC
 
-
 -- -- Q.2
--- Total Revenue from Coffee Sales
--- What is the total revenue generated from coffee sales across all cities in the last quarter of 2023?
+-- A.Total Revenue from Coffee Sales
+-- B.What is the total revenue generated from coffee sales across all cities in the last quarter of 2023?
 
-	
+	--A
 	SELECT 
 	SUM(total) as total_revenue
 	FROM sales
@@ -29,7 +27,7 @@ ORDER BY 2 DESC
 	AND
 	DATEPART(quarter,sale_date) = 4
 
-
+	--B
 	SELECT
 	ci.city_name,
 	SUM(s.TOTAL) AS TOTAL_REVENUE
