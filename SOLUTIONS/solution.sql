@@ -18,27 +18,28 @@ ORDER BY 2 DESC
 -- A.Total Revenue from Coffee Sales
 -- B.What is the total revenue generated from coffee sales across all cities in the last quarter of 2023?
 
-	--A
-	SELECT 
-	SUM(total) as total_revenue
-	FROM sales
-	WHERE 
+--A
+SELECT 
+SUM(total) as total_revenue
+FROM sales
+WHERE 
 	YEAR(sale_date)  = 2023
 	AND
 	DATEPART(quarter,sale_date) = 4
 
-	--B
-	SELECT
-	ci.city_name,
-	SUM(s.TOTAL) AS TOTAL_REVENUE
-	FROM SALES as s
-	LEFT JOIN customers AS C
+--B
+SELECT
+ci.city_name,
+SUM(s.TOTAL) AS TOTAL_REVENUE
+FROM SALES as s
+LEFT JOIN customers AS C
 	ON c.customer_id = s.customer_id
-	LEFT JOIN city as ci
+LEFT JOIN city as ci
 	on ci.city_id=c.city_id
-	WHERE
+WHERE
 	YEAR(SALE_DATE)=2023
 	AND
 	DATEPART(QUARTER,SALE_DATE)=4
-	GROUP BY ci.city_name
-	ORDER BY SUM(s.TOTAL)
+GROUP BY ci.city_name
+ORDER BY SUM(s.TOTAL)
+
