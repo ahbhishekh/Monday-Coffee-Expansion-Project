@@ -45,10 +45,6 @@ GROUP BY ci.city_name
 ORDER BY SUM(s.TOTAL)
 
 
-
-
-
-
 -- Q.3
 -- Sales Count for Each Product
 -- How many units of each coffee product have been sold?
