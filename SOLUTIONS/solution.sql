@@ -39,7 +39,45 @@ LEFT JOIN city as ci
 WHERE
 	YEAR(SALE_DATE)=2023
 	AND
+
 	DATEPART(QUARTER,SALE_DATE)=4
 GROUP BY ci.city_name
 ORDER BY SUM(s.TOTAL)
+
+
+
+
+
+
+-- Q.3
+-- Sales Count for Each Product
+-- How many units of each coffee product have been sold?
+SELECT 
+p.product_name,
+COUNT(s.sale_id) as total_orders
+FROM products as p
+LEFT JOIN sales AS s
+ON p.product_id=s.product_id
+GROUP BY p.product_name
+order by COUNT(s.sale_id)
+
+-- Q.4
+-- Average Sales Amount per City
+-- What is the average sales amount per customer in each city?
+-- city abd total sale
+-- no cx in each these city
+select  
+ci.city_name,
+sum(s.total) as total_sales,
+count(distinct s.customer_id) as total_customers,
+cast(round(cast(sum(s.total) as decimal(18,2))/count(distinct s.customer_id),2)as decimal (18,2)) as avg_price
+from sales as s
+join customers as c
+on s.customer_id=c.customer_id
+join city as ci
+on ci.city_id=c.city_id
+group by ci.city_name
+order by total_sales
+
+
 
