@@ -75,5 +75,38 @@ on ci.city_id=c.city_id
 group by ci.city_name
 order by total_sales
 
+-- -- Q.5
+-- City Population and Coffee Consumers (25%)
+-- Provide a list of cities along with their populations and estimated coffee consumers.
+-- return city_name, total current cx, estimated coffee consumers (25%)
+
+WITH city_table AS
+(
+ SELECT
+ city_name,
+ CAST(ROUND((population * 0.25) / 1000000.0, 2)AS DECIMAL(10,2)) AS coffee_consumers
+ FROM city
+),
+customers_table AS
+(
+ SELECT
+ ci.city_name,
+ COUNT(DISTINCT c.customer_id) AS unique_cx
+ FROM sales AS s
+ JOIN customers AS c
+ ON c.customer_id = s.customer_id
+
+ JOIN city AS ci
+ ON ci.city_id = c.city_id
+ GROUP BY ci.city_name
+)
+
+SELECT
+    customers_table.city_name,
+    city_table.coffee_consumers AS coffee_consumer_in_millions,
+    customers_table.unique_cx
+FROM city_table
+JOIN customers_table
+ON city_table.city_name = customers_table.city_name;
 
 
