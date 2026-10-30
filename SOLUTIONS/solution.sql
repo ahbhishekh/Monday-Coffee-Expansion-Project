@@ -109,4 +109,26 @@ FROM city_table
 JOIN customers_table
 ON city_table.city_name = customers_table.city_name;
 
+-- -- Q6
+-- Top Selling Products by City
+-- What are the top 3 selling products in each city based on sales volume?
+select *
+from
+(
+SELECT 
+ci.city_name,
+p.product_name,
+count(s.product_id) as total_sales,
+dense_rank() over(partition by ci.city_name order by count(s.sale_id)desc) as rank
+FROM SALES as s
+left join products as p
+on p.product_id=s.product_id
+left join customers as c
+on c.customer_id=s.customer_id
+left join city as ci
+on ci.city_id=c.city_id
+group by p.product_name,ci.city_name
+) as t
+where rank<=3
+
 
