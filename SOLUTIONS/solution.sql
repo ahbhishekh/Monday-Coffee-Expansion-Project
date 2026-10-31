@@ -148,4 +148,51 @@ s.product_id in(1,2,3,4,5,6,7,8,9,10,11,12,13,14)
 group by ci.city_name 
 
 
+-- -- Q.8
+-- Average Sale vs Rent
+-- Find each city and their average sale per customer and avg rent per customer
+
+-- Conclusions
+
+with sales_table as 
+(
+select 
+ci.city_name,
+sum(s.total)as total_sales,
+count(distinct s.customer_id) as total_customers,
+ROUND(sum(s.total)/count(distinct s.customer_id),2) as average_per_person
+FROM SALES AS S
+LEFT JOIN customers as c
+on c.customer_id=s.customer_id
+left join city as ci
+on ci.city_id=c.city_id
+group by ci.city_name
+),
+avg_rent as 
+(
+select 
+ci.city_name as city_name,
+ci.estimated_rent,
+count(distinct s.customer_id) as total_customers,
+round(ci.estimated_rent/count(distinct s.customer_id),2) as avg_rent_per_person
+from sales as s
+left join customers as c
+on c.customer_id=s.customer_id
+left join city as ci
+on ci.city_id=c.city_id
+group by ci.city_name,ci.estimated_rent 
+)
+select 
+st.city_name,
+st.total_customers,
+av.avg_rent_per_person,
+st.average_per_person
+from sales_table as st
+left join avg_rent as av
+on st.city_name=av.city_name
+order by st.average_per_person desc
+
+
+
+
 
