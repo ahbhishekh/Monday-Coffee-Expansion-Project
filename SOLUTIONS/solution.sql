@@ -131,4 +131,21 @@ group by p.product_name,ci.city_name
 ) as t
 where rank<=3
 
+-- Q.7
+-- Customer Segmentation by City
+-- How many unique customers are there in each city who have purchased coffee products?
+
+select  
+ci.city_name,
+count(distinct c.customer_id) as unique_customers
+from city as ci
+left join customers as c
+on c.city_id=ci.city_id
+left join sales as s 
+on s.customer_id=c.customer_id
+where 
+s.product_id in(1,2,3,4,5,6,7,8,9,10,11,12,13,14) 
+group by ci.city_name 
+
+
 
