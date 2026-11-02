@@ -193,6 +193,47 @@ on st.city_name=av.city_name
 order by st.average_per_person desc
 
 
+-- Q.9
+-- Monthly Sales Growth
+-- Sales growth rate: Calculate the percentage growth (or decline) in sales over different time periods (monthly)
+-- by each city
 
+
+WITH Sales_Total as
+(
+select 
+ci.city_name as City_name,
+DATEPART(MONTH,sale_date) AS Month,
+DATEPART(YEAR,sale_date) AS Year,
+sum(toTal) as Total_sales 
+FROM sales as s
+LEFT JOIN customers as c
+on c.customer_id=s.customer_id
+LEFT JOIN city as ci
+ON c.city_id=ci.city_id
+GROUP BY ci.city_name,
+DATEPART(MONTH,sale_date),
+DATEPART(YEAR,sale_date)
+
+),
+Growth_Ratio AS
+(
+SELECT 
+City_name,
+month,
+year,
+Total_sales as cr_monthly_sales,
+LAG(Total_sales) OVER(PARTITION BY City_name ORDER BY year,month) as Last_Month_Sales
+FROM Sales_Total
+)
+SELECT 
+city_name,
+Month,
+Year,
+cr_monthly_sales,
+Last_Month_sales,
+ROUND(((cr_monthly_sales-Last_month_sales)/last_month_sales)*100.0,2) as Growth_Ratio
+From Growth_Ratio
+WHERE Last_Month_Sales IS NOT NULL
 
 
